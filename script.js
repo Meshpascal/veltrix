@@ -268,3 +268,145 @@ if (contactForm) {
     }, 1800);
   });
 }
+ // Projects Page Navigation Functionality
+(function() {
+  // Project Data Store
+  const projectsData = {
+    "business-platform": {
+      title: "Business Landing Platform",
+      description: "A high-conversion marketing hub built for a B2B software startup. The platform features dynamic sections, optimized load times, and immersive storytelling that increased demo requests by 37% within 3 months.",
+      image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1200&q=80",
+      tech: ["React", "Framer Motion", "Tailwind CSS", "Headless CMS"],
+      outcome: "✅ 37% increase in qualified leads • 99 Lighthouse performance score • Fully responsive design."
+    },
+    "mobile-booking": {
+      title: "Mobile Booking App",
+      description: "An end-to-end hospitality booking app with real-time availability, biometric login, and push notifications. Designed for boutique hotels, reducing booking friction and enabling direct guest communication.",
+      image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1200&q=80",
+      tech: ["React Native", "Node.js", "MongoDB", "Stripe Connect", "Firebase Push"],
+      outcome: "🚀 Launch partner saw 52% faster booking completion • 28% increase in direct reservations within first 6 months."
+    },
+    "analytics-dashboard": {
+      title: "Analytics Dashboard",
+      description: "Interactive dashboard for operations teams: visualize KPIs, anomaly detection, and exportable reports. Custom widgets and drag-and-drop layout empower business leaders to monitor critical metrics in real time.",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
+      tech: ["Vue.js", "D3.js", "Express", "PostgreSQL", "WebSockets"],
+      outcome: "📊 Reduced reporting time by 70% • Real-time data sync • Adopted by 4 enterprise clients."
+    }
+  };
+
+  // DOM Elements
+  const modal = document.getElementById('projectModal');
+  const detailTitle = document.getElementById('detailTitle');
+  const detailImage = document.getElementById('detailImage');
+  const detailDescription = document.getElementById('detailDescription');
+  const techStackContainer = document.getElementById('techStackContainer');
+  const detailOutcome = document.getElementById('detailOutcome');
+  const closeBtn = document.querySelector('.close-detail');
+  const backBtn = document.getElementById('backToProjectsBtn');
+
+  // Helper: Open project detail
+  function openProjectDetail(projectKey) {
+    const project = projectsData[projectKey];
+    if (!project || !modal) return;
+    
+    detailTitle.innerText = project.title;
+    detailDescription.innerText = project.description;
+    if (detailImage) {
+      detailImage.style.backgroundImage = `url('${project.image}')`;
+      detailImage.style.backgroundSize = "cover";
+      detailImage.style.backgroundPosition = "center";
+    }
+    if (techStackContainer) {
+      techStackContainer.innerHTML = project.tech.map(tech => `<span>${tech}</span>`).join('');
+    }
+    if (detailOutcome) detailOutcome.innerText = project.outcome;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Update URL hash for deep linking
+    if (history.pushState) {
+      history.pushState({ project: projectKey }, project.title, `#project/${projectKey}`);
+    }
+  }
+
+  function closeModal() {
+    if (modal) modal.classList.remove('active');
+    document.body.style.overflow = '';
+    if (window.location.hash.includes('#project/')) {
+      history.pushState(null, '', window.location.pathname + window.location.search);
+    }
+  }
+
+  // Attach click listeners to project cards
+  const projectCards = document.querySelectorAll('.project-card');
+  projectCards.forEach(card => {
+    const projectId = card.getAttribute('data-project');
+    if (projectId) {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        openProjectDetail(projectId);
+      });
+      
+      const linkInside = card.querySelector('.card-link-trigger');
+      if (linkInside) {
+        linkInside.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openProjectDetail(projectId);
+        });
+      }
+    }
+  });
+
+  // Modal close handlers
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (backBtn) backBtn.addEventListener('click', closeModal);
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+  }
+
+  // Handle browser back/forward navigation
+  window.addEventListener('popstate', (event) => {
+    const hash = window.location.hash;
+    if (!hash || !hash.startsWith('#project/')) {
+      if (modal && modal.classList.contains('active')) closeModal();
+      return;
+    }
+    const projectKey = hash.replace('#project/', '');
+    if (projectsData[projectKey] && modal && !modal.classList.contains('active')) {
+      openProjectDetail(projectKey);
+    }
+  });
+
+  // If URL contains project hash on load, open automatically
+  if (window.location.hash && window.location.hash.startsWith('#project/')) {
+    const initialKey = window.location.hash.replace('#project/', '');
+    if (projectsData[initialKey]) {
+      setTimeout(() => {
+        openProjectDetail(initialKey);
+      }, 100);
+    }
+  }
+
+  // Mobile navigation toggle
+  const navToggleBtn = document.querySelector('.nav-toggle');
+  const navMenu = document.querySelector('.nav-links');
+  if (navToggleBtn && navMenu) {
+    navToggleBtn.addEventListener('click', function() {
+      const expanded = this.getAttribute('aria-expanded') === 'true' ? false : true;
+      navMenu.classList.toggle('open');
+      this.setAttribute('aria-expanded', expanded);
+    });
+  }
+
+  // Video autoplay fallback
+  const heroVideo = document.querySelector('.hero-video');
+  if (heroVideo) {
+    heroVideo.play().catch(e => console.log("Video autoplay prevented"));
+  }
+
+  console.log('✅ Projects page ready — Click any project card to view details');
+})();

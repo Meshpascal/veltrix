@@ -43,7 +43,7 @@
         <div class="page-hero-copy">
           <p class="eyebrow">Projects</p>
           <h1>Work that shows how strategy, design, and engineering come together.</h1>
-          <p class="hero-text">Use these project cards as a starter portfolio and replace them with your real client or internal work.</p>
+          <p class="hero-text">Click any project card to explore detailed case studies. Each project reveals full scope, tech stack, and outcomes.</p>
         </div>
         <div class="hero-media glass-card">
           <span class="media-badge">Product Build</span>
@@ -70,23 +70,26 @@
     <main>
       <section class="section">
         <div class="card-grid projects-grid projects-grid-wide">
-          <article class="project-card glass-card">
+          <!-- Project Card 1 -->
+          <article class="project-card glass-card" data-project="business-platform">
             <div class="project-image project-one"></div>
             <h3>Business Landing Platform</h3>
             <p>A premium marketing website with bold messaging, clear calls to action, and polished visual hierarchy.</p>
-            <a href="contact.html">Request similar work</a>
+            <a href="javascript:void(0)" class="card-link-trigger">Explore project →</a>
           </article>
-          <article class="project-card glass-card">
+          <!-- Project Card 2 -->
+          <article class="project-card glass-card" data-project="mobile-booking">
             <div class="project-image project-two"></div>
             <h3>Mobile Booking App</h3>
             <p>A streamlined booking concept focused on speed, trust, and a smooth customer journey from start to finish.</p>
-            <a href="contact.html">Request similar work</a>
+            <a href="javascript:void(0)" class="card-link-trigger">Explore project →</a>
           </article>
-          <article class="project-card glass-card">
+          <!-- Project Card 3 -->
+          <article class="project-card glass-card" data-project="analytics-dashboard">
             <div class="project-image project-three"></div>
             <h3>Analytics Dashboard</h3>
             <p>A clean internal dashboard concept built to make business reporting easier to read and act on.</p>
-            <a href="contact.html">Request similar work</a>
+            <a href="javascript:void(0)" class="card-link-trigger">Explore project →</a>
           </article>
         </div>
       </section>
@@ -111,6 +114,19 @@
       </div>
       <p class="copyright">&copy; 2026 Veltrix Technologies. All rights reserved.</p>
     </footer>
+  </div>
+
+  <!-- Project Detail Modal -->
+  <div id="projectModal" class="project-overlay">
+    <div class="project-detail-card">
+      <button class="close-detail" aria-label="Close detail view">&times;</button>
+      <h2 id="detailTitle">Business Landing Platform</h2>
+      <div id="detailImage" class="project-detail-image"></div>
+      <p id="detailDescription">Detailed case study will appear here.</p>
+      <div id="techStackContainer" class="tech-stack"></div>
+      <p id="detailOutcome" style="margin-top: 0.8rem; line-height: 1.5;"></p>
+      <button class="btn-back" id="backToProjectsBtn">← Back to all projects</button>
+    </div>
   </div>
 
   <script src="script.js"></script>
